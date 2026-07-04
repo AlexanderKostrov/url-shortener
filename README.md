@@ -1,58 +1,134 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# URL Shortener
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Небольшое Laravel-приложение для создания коротких ссылок.
 
-## About Laravel
+Пользователь может зарегистрироваться, войти в личный кабинет, создать короткую ссылку, открыть ее публично и посмотреть статистику переходов.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Стек
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Laravel 13
+- Filament v3
+- MySQL
+- PHP 8.3
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+В текущей конфигурации проект подготовлен для запуска через Laravel Sail с MySQL.
 
-## Learning Laravel
+## Возможности
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- регистрация и вход;
+- личный кабинет на Filament;
+- создание коротких ссылок;
+- публичный редирект по короткому коду;
+- запись статистики переходов;
+- просмотр статистики переходов в кабинете;
+- удаление своих ссылок;
+- пользователь видит только свои ссылки.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Установка
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+cp .env.example .env
+php artisan key:generate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Настройте подключение к базе данных в `.env`.
 
-## Contributing
+Пример для MySQL:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=url_shortener
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Code of Conduct
+Важно: значение `APP_URL` должно совпадать с адресом, по которому открыт проект.
+Именно из `APP_URL` формируется полный короткий URL в кабинете.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Например, если проект открыт так:
 
-## Security Vulnerabilities
+```text
+http://127.0.0.1:8000
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+то в `.env` нужно указать:
 
-## License
+```env
+APP_URL=http://127.0.0.1:8000
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Если проект запущен через Sail и открыт на `http://localhost`, можно оставить:
+
+```env
+APP_URL=http://localhost
+```
+
+После изменения `APP_URL` очистите кэш конфигурации:
+
+```bash
+php artisan config:clear
+```
+
+Затем выполните миграции:
+
+```bash
+php artisan migrate
+```
+
+Запуск локального сервера:
+
+```bash
+php artisan serve
+```
+
+Приложение будет доступно по адресу:
+
+```text
+http://127.0.0.1:8000
+```
+
+## Запуск через Laravel Sail
+
+Если используется Sail:
+
+```bash
+vendor/bin/sail up -d
+vendor/bin/sail artisan migrate
+```
+
+Открыть приложение:
+
+```text
+http://localhost
+```
+
+Если порт `80` занят, можно указать другой порт в `.env`:
+
+```env
+APP_PORT=8080
+```
+
+После этого перезапустить Sail:
+
+```bash
+vendor/bin/sail down
+vendor/bin/sail up -d
+```
+
+## Личный кабинет
+
+Кабинет доступен по адресу:
+
+```text
+/cabinet
+```
+
+Страницы входа и регистрации:
+
+```text
+/cabinet/login
+/cabinet/register
+```

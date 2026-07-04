@@ -2,16 +2,23 @@
 
 namespace App\Filament\Resources\LinkResource\RelationManagers;
 
+use App\Models\Link;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class VisitsRelationManager extends RelationManager
 {
     protected static string $relationship = 'visits';
 
     protected static ?string $title = 'Visits';
+
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
+    {
+        return $ownerRecord instanceof Link && $ownerRecord->user_id === auth()->id();
+    }
 
     public function form(Form $form): Form
     {

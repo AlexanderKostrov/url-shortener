@@ -27,6 +27,7 @@ class CabinetPanelProvider extends PanelProvider
             ->id('cabinet')
             ->path('cabinet')
             ->login()
+            ->registration()
             ->colors([
                 'primary' => Color::Amber,
             ])

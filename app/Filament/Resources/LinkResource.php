@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class LinkResource extends Resource
 {
@@ -94,6 +95,26 @@ class LinkResource extends Resource
     {
         return parent::getEloquentQuery()
             ->where('user_id', auth()->id());
+    }
+
+    public static function canView(Model $record): bool
+    {
+        return static::ownsRecord($record);
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return static::ownsRecord($record);
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return static::ownsRecord($record);
+    }
+
+    private static function ownsRecord(Model $record): bool
+    {
+        return $record instanceof Link && $record->user_id === auth()->id();
     }
 
     public static function getRelations(): array
